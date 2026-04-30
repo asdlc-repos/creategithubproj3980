@@ -1,0 +1,25 @@
+{
+  "overview": "A minimal single-page web application serving a static 'Hello World' message. The architecture consists of a single frontend component that delivers HTML content directly to visitors without requiring backend API dependencies. The web application is containerized and deployed as a standalone service.",
+  "requirements": [
+    "The application must display 'Hello World' text when accessed",
+    "The application must be accessible via standard web browsers",
+    "The application must respond immediately on page load",
+    "The application must include a health check endpoint for monitoring",
+    "The application must be containerized using Docker",
+    "The application must run as a Kubernetes deployment"
+  ],
+  "components": [
+    {
+      "name": "hello-world-web",
+      "componentType": "web-app",
+      "language": "TypeScript / React",
+      "dependsOn": [],
+      "entrypoint": "deployment/web-application",
+      "buildpack": "docker",
+      "appPath": "/hello-world-web",
+      "openAPISpec": "openapi: 3.0.3\ninfo:\n  title: Hello World Web Application\n  version: 1.0.0\n  description: A simple web application that displays Hello World\npaths:\n  /health:\n    get:\n      summary: Health check endpoint\n      description: Returns the health status of the web application\n      operationId: healthCheck\n      responses:\n        '200':\n          description: Application is healthy\n          content:\n            application/json:\n              schema:\n                type: object\n                properties:\n                  status:\n                    type: string\n                    example: ok\n                  timestamp:\n                    type: string\n                    format: date-time\n                    example: '2024-01-15T10:30:00Z'",
+      "componentAgentInstructions": "Implement a React-based single-page application using TypeScript and Vite as the build tool. Create a minimal React component that renders 'Hello World' as the main heading (h1 element). The application should use React 18+ with functional components. Configure Vite to build the application for production with optimized assets. The Docker container should use a multi-stage build: first stage uses node:18-alpine to build the React app with 'npm run build', second stage uses nginx:alpine to serve the static files. Copy the built files from /dist to /usr/share/nginx/html. Create a custom nginx.conf that serves the app on port 8080 (not 80) and includes a /health endpoint that returns JSON {status: ok, timestamp: current ISO timestamp} with 200 status. The nginx config should support client-side routing by redirecting all non-file requests to index.html. Include proper CORS headers if needed. The package.json should include react, react-dom, typescript, vite, and @vitejs/plugin-react. The health endpoint must return valid JSON and should not depend on the React application state. Ensure the Docker EXPOSE directive specifies port 8080. The application should have a clean, centered layout with the Hello World text prominently displayed. Include a basic CSS reset and minimal styling to ensure cross-browser compatibility. The build should produce optimized, minified production assets."
+    }
+  ],
+  "sourceSpec": "spec-v1"
+}
